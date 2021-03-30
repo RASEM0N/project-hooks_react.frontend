@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import useFetch from '../../Hooks/useFetch'
+import useLocalStorage from '../../Hooks/useLocalStorage'
 
 function Register() {
     const [email, setEmail] = useState('')
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [isAuthorize, setIsAuthorize] = useState(false)
     const [{ response, isLoading, error }, doFetch] = useFetch('/users')
+    const [token, setToken] = useLocalStorage('token')
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -21,6 +24,14 @@ function Register() {
             },
         })
     }
+
+    useEffect(() => {
+        if (!response) return
+        setToken(response.user?.token)
+        setIsAuthorize(true)
+    }, [response])
+
+    if (isAuthorize || token) return <Redirect to="/" />
 
     return (
         <div className="auth-page">

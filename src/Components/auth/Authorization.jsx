@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
+import { Link, Redirect } from 'react-router-dom'
 import useFetch from '../../Hooks/useFetch'
+import useLocalStorage from '../../Hooks/useLocalStorage'
 
 // bufalo1234a@gmail.com: bufalo1234a
 
 function Authorization() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [isAuthorize, setIsAuthorize] = useState(false)
     const [{ response, isLoading, error }, doFetch] = useFetch('/users/login')
-
+    const [token, setToken] = useLocalStorage('token')
     const handleSubmit = (e) => {
         e.preventDefault()
         doFetch({
@@ -22,6 +23,14 @@ function Authorization() {
             },
         })
     }
+
+    useEffect(() => {
+        if (!response) return
+        setToken(response.user?.token)
+        setIsAuthorize(true)
+    }, [response])
+
+    if (isAuthorize || token) return <Redirect to="/" />
 
     return (
         <div className="auth-page">
