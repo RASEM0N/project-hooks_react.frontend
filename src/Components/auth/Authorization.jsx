@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import useFetch from '../../Hooks/useFetch'
 
+// bufalo1234a@gmail.com: bufalo1234a
+
 function Authorization() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -26,13 +28,10 @@ function Authorization() {
             <div className="container page">
                 <div className="row">
                     <div className="col-md-6 offset-md-3 col-xs-12">
-                        <div
-                            className="text-xs-center m-b-1"
-                            style={{ fontSize: 20 }}
-                        >
-                            LOGIN
-                        </div>
-
+                        <h1 className="text-xs-center">LOGIN</h1>
+                        <p className="text-xs-center">
+                            <Link to="/register">Need an account?</Link>
+                        </p>
                         <form onSubmit={handleSubmit}>
                             <fieldset>
                                 <fieldset className="form-group">
@@ -58,18 +57,14 @@ function Authorization() {
                                     />
                                 </fieldset>
                                 <button
-                                    className="btn bnt-lg btn-primary pull-xs-right m-b-1"
+                                    className="btn bnt-lg btn-primary pull-xs-right"
                                     type="submit"
                                     disabled={isLoading}
                                 >
-                                    Submit
+                                    Sign in
                                 </button>
                             </fieldset>
                         </form>
-
-                        <p className="text-xs-center">
-                            <Link to="/register">Need an account?</Link>
-                        </p>
                     </div>
                 </div>
             </div>
