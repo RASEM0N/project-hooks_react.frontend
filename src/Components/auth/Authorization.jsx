@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom'
 import useFetch from '../../Hooks/useFetch'
 import useLocalStorage from '../../Hooks/useLocalStorage'
 
-// bufalo1234a@gmail.com: bufalo1234a
+// user: {email: "sadhsjd@gmail.com", password: "sadhsjdsadhsjd", username: "sadhsjd"}
 
 function Authorization() {
     const [email, setEmail] = useState('')
@@ -17,8 +17,8 @@ function Authorization() {
             method: 'POST',
             data: {
                 user: {
-                    email: 'email',
-                    password: 'password',
+                    email: email,
+                    password: password,
                 },
             },
         })
