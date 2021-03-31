@@ -29,7 +29,7 @@ function Register() {
         if (!response) return
         setToken(response.user?.token)
         setIsAuthorize(true)
-    }, [response])
+    }, [response, setToken])
 
     if (isAuthorize || token) return <Redirect to="/" />
 

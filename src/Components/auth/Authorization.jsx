@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import useFetch from '../../Hooks/useFetch'
 import useLocalStorage from '../../Hooks/useLocalStorage'
+import { CurrentUserContext } from '../contexts/currentUser'
 
 // user: {email: "sadhsjd@gmail.com", password: "sadhsjdsadhsjd", username: "sadhsjd"}
 
@@ -11,6 +12,11 @@ function Authorization() {
     const [isAuthorize, setIsAuthorize] = useState(false)
     const [{ response, isLoading, error }, doFetch] = useFetch('/users/login')
     const [token, setToken] = useLocalStorage('token')
+    const [currentUserState, setCurrentUserState] = useContext(
+        CurrentUserContext
+    )
+    console.log(currentUserState)
+
     const handleSubmit = (e) => {
         e.preventDefault()
         doFetch({
@@ -28,7 +34,13 @@ function Authorization() {
         if (!response) return
         setToken(response.user?.token)
         setIsAuthorize(true)
-    }, [response])
+        setCurrentUserState((state) => ({
+            ...state,
+            isLoggedIn: true,
+            isLoading: false,
+            currentUser: response.user,
+        }))
+    }, [response, setToken])
 
     if (isAuthorize || token) return <Redirect to="/" />
 
