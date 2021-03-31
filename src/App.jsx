@@ -3,17 +3,18 @@ import Routes from './Components/routes'
 import { BrowserRouter } from 'react-router-dom'
 import Navbar from './Components/common/Navbar'
 import { CurrentUserProvider } from './Components/contexts/currentUser'
+import UserChecker from './Components/common/UserChecker'
 
 const App = () => {
     return (
-        <div>
-            <CurrentUserProvider>
+        <CurrentUserProvider>
+            <UserChecker>
                 <BrowserRouter>
                     <Navbar />
                     <Routes />
                 </BrowserRouter>
-            </CurrentUserProvider>
-        </div>
+            </UserChecker>
+        </CurrentUserProvider>
     )
 }
 

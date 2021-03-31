@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import useFetch from '../../Hooks/useFetch'
 import useLocalStorage from '../../Hooks/useLocalStorage'
+import { CurrentUserContext } from '../contexts/currentUser'
+import ErrorMessage from './ErrorMessage'
 
 function Register() {
     const [email, setEmail] = useState('')
@@ -10,6 +12,7 @@ function Register() {
     const [isAuthorize, setIsAuthorize] = useState(false)
     const [{ response, isLoading, error }, doFetch] = useFetch('/users')
     const [token, setToken] = useLocalStorage('token')
+    const [, setCurrentUserState] = useContext(CurrentUserContext)
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -29,7 +32,13 @@ function Register() {
         if (!response) return
         setToken(response.user?.token)
         setIsAuthorize(true)
-    }, [response, setToken])
+        setCurrentUserState((state) => ({
+            ...state,
+            isLoggedIn: true,
+            isLoading: false,
+            currentUser: response.user,
+        }))
+    }, [response, setToken, setCurrentUserState])
 
     if (isAuthorize || token) return <Redirect to="/" />
 
@@ -43,6 +52,7 @@ function Register() {
                             <Link to="/login">Have an account?</Link>
                         </p>
                         <form onSubmit={handleSubmit}>
+                            {error && <ErrorMessage errors={error.errors} />}
                             <fieldset>
                                 <fieldset className="form-group">
                                     <input
@@ -72,6 +82,7 @@ function Register() {
                                         type="password"
                                         className="form-control form-control-lg"
                                         placeholder="Password"
+                                        autoComplete="on"
                                         value={password}
                                         onChange={(e) =>
                                             setPassword(e.target.value)

@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom'
 import useFetch from '../../Hooks/useFetch'
 import useLocalStorage from '../../Hooks/useLocalStorage'
 import { CurrentUserContext } from '../contexts/currentUser'
+import ErrorMessage from './ErrorMessage'
 
 // user: {email: "sadhsjd@gmail.com", password: "sadhsjdsadhsjd", username: "sadhsjd"}
 
@@ -12,10 +13,7 @@ function Authorization() {
     const [isAuthorize, setIsAuthorize] = useState(false)
     const [{ response, isLoading, error }, doFetch] = useFetch('/users/login')
     const [token, setToken] = useLocalStorage('token')
-    const [currentUserState, setCurrentUserState] = useContext(
-        CurrentUserContext
-    )
-    console.log(currentUserState)
+    const [, setCurrentUserState] = useContext(CurrentUserContext)
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -40,7 +38,7 @@ function Authorization() {
             isLoading: false,
             currentUser: response.user,
         }))
-    }, [response, setToken])
+    }, [response, setToken, setCurrentUserState])
 
     if (isAuthorize || token) return <Redirect to="/" />
 
@@ -54,6 +52,7 @@ function Authorization() {
                             <Link to="/register">Need an account?</Link>
                         </p>
                         <form onSubmit={handleSubmit}>
+                            {error && <ErrorMessage errors={error.errors} />}
                             <fieldset>
                                 <fieldset className="form-group">
                                     <input
@@ -72,6 +71,7 @@ function Authorization() {
                                         className="form-control form-control-lg"
                                         placeholder="Password"
                                         value={password}
+                                        autoComplete="on"
                                         onChange={(e) =>
                                             setPassword(e.target.value)
                                         }
