@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import useLocalStorage from './useLocalStorage'
 
@@ -10,10 +10,14 @@ const useFetch = (someUrl) => {
     const [options, setOptions] = useState({})
     const [token] = useLocalStorage('token')
 
-    const doFetch = (options = {}) => {
+    // doFetch не кэшируется React-ом
+    // также, как и остальные кастомные хуки
+    // useCallback в помощь
+
+    const doFetch = useCallback((options = {}) => {
         setOptions(options)
         setIsLoading(true)
-    }
+    }, [])
 
     useEffect(() => {
         if (!isLoading) return
@@ -36,7 +40,7 @@ const useFetch = (someUrl) => {
                 setIsLoading(false)
                 setError(error.response.data)
             })
-    }, [isLoading, options, someUrl])
+    }, [isLoading, options, someUrl, token])
 
     return [
         {

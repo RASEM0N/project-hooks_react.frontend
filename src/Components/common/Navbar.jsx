@@ -3,7 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { CurrentUserContext } from '../contexts/currentUser'
 
 const Navbar = () => {
-    const [{ isLoggedIn }] = useContext(CurrentUserContext)
+    const [{ isLoggedIn, currentUser }] = useContext(CurrentUserContext)
 
     return (
         <nav className="navbar navbar-light">
@@ -17,7 +17,7 @@ const Navbar = () => {
                             Home
                         </NavLink>
                     </li>
-                    {!isLoggedIn && (
+                    {isLoggedIn === false && (
                         <React.Fragment>
                             <li className="nav-item">
                                 <NavLink to="/login" className="nav-link" exact>
@@ -31,6 +31,34 @@ const Navbar = () => {
                                     exact
                                 >
                                     Sign up
+                                </NavLink>
+                            </li>
+                        </React.Fragment>
+                    )}
+                    {isLoggedIn === true && (
+                        <React.Fragment>
+                            <li className="nav-item">
+                                <NavLink
+                                    to="/articles/new"
+                                    className="nav-link"
+                                    exact
+                                >
+                                    <i className="ion-compose" /> New Post
+                                </NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink
+                                    to={`/profiles/${currentUser.id}`}
+                                    className="nav-link"
+                                    exact
+                                >
+                                    <img
+                                        src={currentUser.image}
+                                        alt=""
+                                        className="user-pic"
+                                    />
+
+                                    {currentUser.username}
                                 </NavLink>
                             </li>
                         </React.Fragment>

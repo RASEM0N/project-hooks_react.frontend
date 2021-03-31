@@ -8,6 +8,9 @@ function UserChecker({ children }) {
     const [, setCurrentUserState] = useContext(CurrentUserContext)
     const [token] = useLocalStorage('token')
 
+    // doFetch не кэшируется React-ом
+    // также, как и остальные кастомные хуки
+
     useEffect(() => {
         if (!token) {
             setCurrentUserState((state) => ({
@@ -22,7 +25,7 @@ function UserChecker({ children }) {
             ...state,
             isLoading: true,
         }))
-    }, [])
+    }, [setCurrentUserState, token, doFetch])
 
     useEffect(() => {
         if (!response) return
@@ -32,7 +35,7 @@ function UserChecker({ children }) {
             isLoading: false,
             currentUser: response.user,
         }))
-    }, [response])
+    }, [response, setCurrentUserState])
 
     return children
 }
