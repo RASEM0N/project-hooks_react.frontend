@@ -3,7 +3,7 @@ import useFetch from '../../Hooks/useFetch'
 import { Link } from 'react-router-dom'
 
 function PolularTags() {
-    const [{ isLoading, response, error }, doFetch] = useFetch('/tags')
+    const [{ isLoading, response }, doFetch] = useFetch('/tags')
 
     useEffect(() => {
         doFetch()
@@ -17,7 +17,6 @@ function PolularTags() {
                 {!isLoading &&
                     response &&
                     response.tags.map((tag) => {
-                        console.log(tag)
                         return !tag ? undefined : (
                             <Link
                                 to={`/tags/${tag}`}

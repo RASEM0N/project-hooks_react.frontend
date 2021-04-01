@@ -1,6 +1,7 @@
 import React from 'react'
 
 function ErrorMessage({ errors }) {
+    console.log(errors)
     return (
         <ul className="error-messages">
             {Object.keys(errors)

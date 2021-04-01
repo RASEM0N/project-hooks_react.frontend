@@ -5,7 +5,7 @@ import Article from './main/Article'
 import Authorization from './auth/Authorization'
 import Register from './auth/Register'
 import TagFeed from './main/TagFeed'
-import YourFeed from './main/FeedToogler'
+import YourFeed from './main/YourFeed'
 
 const Routes = () => {
     return (

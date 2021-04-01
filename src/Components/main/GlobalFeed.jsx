@@ -32,6 +32,7 @@ const GlobalFeed = ({ location }) => {
             <div className="container page">
                 <div className="row">
                     <div className="col-md-9">
+                        <FeedToogler />
                         {isLoading && <div>Loading...</div>}
                         {error && <div>Some error happend</div>}
                         {!isLoading && response && (
