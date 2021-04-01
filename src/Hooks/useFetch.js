@@ -38,7 +38,12 @@ const useFetch = (someUrl) => {
             })
             .catch((error) => {
                 setIsLoading(false)
-                setError(error.response.data)
+                console.log(error)
+                if (error.response?.data) {
+                    setError(error.response.data)
+                } else {
+                    setError({ errors: ['Server error'] })
+                }
             })
     }, [isLoading, options, someUrl, token])
 

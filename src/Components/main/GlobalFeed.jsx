@@ -1,14 +1,23 @@
 import React, { useEffect } from 'react'
 import useFetch from '../../Hooks/useFetch'
 import Feed from '../common/Feed'
+import Paginations from '../common/Paginations'
+import { parse, stringify } from 'query-string'
 
-const GlobalFeed = () => {
-    const apiUrl = '/articles?limit=10&offset=0'
+const GlobalFeed = ({ location }) => {
+    const pageSearch = parse(location.search).page
+        ? Number(parse(location.search).page)
+        : 1
+    const offset = (pageSearch - 1) * 10
+    const params = stringify({
+        limit: 10,
+        offset: offset,
+    })
+    const apiUrl = `/articles?${params}`
     const [{ response, isLoading, error }, doFetch] = useFetch(apiUrl)
-
     useEffect(() => {
         doFetch()
-    }, [doFetch])
+    }, [doFetch, pageSearch])
 
     return (
         <div className="home-page">
@@ -24,7 +33,15 @@ const GlobalFeed = () => {
                         {isLoading && <div>Loading...</div>}
                         {error && <div>Some error happend</div>}
                         {!isLoading && response && (
-                            <Feed articles={response.articles} />
+                            <React.Fragment>
+                                <Feed articles={response.articles} />
+                                <Paginations
+                                    total={response.articlesCount}
+                                    url="/"
+                                    currentPage={pageSearch}
+                                    limit={10}
+                                />
+                            </React.Fragment>
                         )}
                     </div>
                     <div className="col-md-3">Populator tags</div>
