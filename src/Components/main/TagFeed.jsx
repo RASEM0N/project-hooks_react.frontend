@@ -6,7 +6,8 @@ import { parse, stringify } from 'query-string'
 import PolularTags from '../common/PolularTags'
 import FeedToogler from './FeedToogler'
 
-const GlobalFeed = ({ location }) => {
+const TagFeed = ({ location, match }) => {
+    const tagName = match.params.slug
     const pageSearch = parse(location.search).page
         ? Number(parse(location.search).page)
         : 1
@@ -14,12 +15,13 @@ const GlobalFeed = ({ location }) => {
     const params = stringify({
         limit: 10,
         offset: offset,
+        tag: tagName,
     })
     const apiUrl = `/articles?${params}`
     const [{ response, isLoading, error }, doFetch] = useFetch(apiUrl)
     useEffect(() => {
         doFetch()
-    }, [doFetch, pageSearch])
+    }, [doFetch, pageSearch, tagName])
 
     return (
         <div className="home-page">
@@ -32,6 +34,7 @@ const GlobalFeed = ({ location }) => {
             <div className="container page">
                 <div className="row">
                     <div className="col-md-9">
+                        <FeedToogler tagname={tagName} />
                         {isLoading && <div>Loading...</div>}
                         {error && <div>Some error happend</div>}
                         {!isLoading && response && (
@@ -39,7 +42,7 @@ const GlobalFeed = ({ location }) => {
                                 <Feed articles={response.articles} />
                                 <Paginations
                                     total={response.articlesCount}
-                                    url="/"
+                                    url={`/tags/${tagName}`}
                                     currentPage={pageSearch}
                                     limit={10}
                                 />
@@ -55,4 +58,4 @@ const GlobalFeed = ({ location }) => {
     )
 }
 
-export default GlobalFeed
+export default TagFeed

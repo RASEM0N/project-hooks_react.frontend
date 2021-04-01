@@ -17,7 +17,7 @@ const Navbar = () => {
                             Home
                         </NavLink>
                     </li>
-                    {isLoggedIn === false && (
+                    {!isLoggedIn && (
                         <React.Fragment>
                             <li className="nav-item">
                                 <NavLink to="/login" className="nav-link" exact>
