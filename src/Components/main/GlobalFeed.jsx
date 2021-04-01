@@ -1,5 +1,37 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import useFetch from '../../Hooks/useFetch'
+import Feed from '../common/Feed'
 
-const GlobalFeed = () => <div>GlobalFeed</div>
+const GlobalFeed = () => {
+    const apiUrl = '/articles?limit=10&offset=0'
+    const [{ response, isLoading, error }, doFetch] = useFetch(apiUrl)
+
+    useEffect(() => {
+        doFetch()
+    }, [doFetch])
+
+    return (
+        <div className="home-page">
+            <div className="banner">
+                <div className="container">
+                    <h1>Medium clone</h1>
+                    <p>A place to share knowled</p>
+                </div>
+            </div>
+            <div className="container page">
+                <div className="row">
+                    <div className="col-md-9">
+                        {isLoading && <div>Loading...</div>}
+                        {error && <div>Some error happend</div>}
+                        {!isLoading && response && (
+                            <Feed articles={response.articles} />
+                        )}
+                    </div>
+                    <div className="col-md-3">Populator tags</div>
+                </div>
+            </div>
+        </div>
+    )
+}
 
 export default GlobalFeed

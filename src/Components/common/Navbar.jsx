@@ -48,7 +48,7 @@ const Navbar = () => {
                             </li>
                             <li className="nav-item">
                                 <NavLink
-                                    to={`/profiles/${currentUser.id}`}
+                                    to={`/profiles/${currentUser.username}`}
                                     className="nav-link"
                                     exact
                                 >
