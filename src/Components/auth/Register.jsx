@@ -12,7 +12,7 @@ function Register() {
     const [isAuthorize, setIsAuthorize] = useState(false)
     const [{ response, isLoading, error }, doFetch] = useFetch('/users')
     const [token, setToken] = useLocalStorage('token')
-    const [, setCurrentUserState] = useContext(CurrentUserContext)
+    const [, dispatch] = useContext(CurrentUserContext)
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -32,13 +32,11 @@ function Register() {
         if (!response) return
         setToken(response.user?.token)
         setIsAuthorize(true)
-        setCurrentUserState((state) => ({
-            ...state,
-            isLoggedIn: true,
-            isLoading: false,
-            currentUser: response.user,
-        }))
-    }, [response, setToken, setCurrentUserState])
+        dispatch({
+            type: 'SET_AUTHORIZED',
+            payload: response.user,
+        })
+    }, [response, setToken, dispatch])
 
     if (isAuthorize || token) return <Redirect to="/" />
 
