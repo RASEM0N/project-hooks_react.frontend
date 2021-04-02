@@ -39,7 +39,7 @@ const Navbar = () => {
                         <React.Fragment>
                             <li className="nav-item">
                                 <NavLink
-                                    to="/articles/new"
+                                    to="/create/article"
                                     className="nav-link"
                                     exact
                                 >
