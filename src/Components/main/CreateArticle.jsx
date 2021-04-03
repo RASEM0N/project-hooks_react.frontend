@@ -23,7 +23,7 @@ function CreateArticle() {
     return (
         <div>
             <FormArticle
-                errors={error ? error?.errors : []}
+                errors={error ? error?.errors : null}
                 onSubmit={handlesSubmit}
             />
         </div>

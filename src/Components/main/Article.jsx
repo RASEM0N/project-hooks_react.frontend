@@ -1,13 +1,18 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import TagFeed from './TagFeed'
 import useFetch from '../../Hooks/useFetch'
+import { CurrentUserContext } from '../contexts/currentUser'
 
 const Article = ({ match }) => {
     const slug = match.params.slug
     const apiUrl = `/articles/${slug}`
 
     const [{ response, isLoading, error }, doFetch] = useFetch(apiUrl)
+    const [{ currentUser }] = useContext(CurrentUserContext)
+
+    const isMyArticle =
+        currentUser?.username === response?.article?.author?.username
 
     useEffect(() => {
         doFetch()
@@ -44,18 +49,38 @@ const Article = ({ match }) => {
                                         }
                                     </span>
                                 </div>
-                                <span>
-                                    <button className="btn btn-sm action-btn btn-outline-secondary">
-                                        <i className="ion-plus-round"></i>{' '}
-                                        Follow{' '}
-                                        {response.article.author.username}
-                                    </button>
-                                    <button className="btn btn-sm btn-outline-primary">
-                                        <i className="ion-heart"></i> Favorite
-                                        Article
-                                        <span className="counter"> (0) </span>
-                                    </button>
-                                </span>
+                                {!isMyArticle && (
+                                    <span>
+                                        <button className="btn btn-sm action-btn btn-outline-secondary">
+                                            <i className="ion-plus-round"></i>{' '}
+                                            Follow{' '}
+                                            {response.article.author.username}
+                                        </button>
+                                        <button className="btn btn-sm btn-outline-primary">
+                                            <i className="ion-heart"></i>{' '}
+                                            Favorite Article
+                                            <span className="counter">
+                                                {' '}
+                                                (0){' '}
+                                            </span>
+                                        </button>
+                                    </span>
+                                )}
+                                {isMyArticle && (
+                                    <span>
+                                        <Link
+                                            className="btn btn-sm action-btn btn-outline-secondary"
+                                            to={`/create/article/${response.article.slug}`}
+                                        >
+                                            <i className="ion-edit"></i> Edit
+                                            Article
+                                        </Link>
+                                        <button className="btn btn-sm btn-outline-danger">
+                                            <i className="ion-trash-a"></i>{' '}
+                                            Delete Article
+                                        </button>
+                                    </span>
+                                )}
                             </div>
                         </div>
                     </div>

@@ -11,7 +11,6 @@ function FormArticle({
     },
     errors = null,
 }) {
-    console.log(errors)
     const [title, setTitle] = useState(ininitialValues?.title)
     const [body, setBody] = useState(ininitialValues?.body)
     const [description, setDescription] = useState(ininitialValues?.description)
@@ -19,8 +18,6 @@ function FormArticle({
 
     const handlesSubmit = (e) => {
         e.preventDefault()
-
-        console.log(tagList)
 
         onSubmit({
             title,
