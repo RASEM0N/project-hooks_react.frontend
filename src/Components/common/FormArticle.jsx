@@ -1,7 +1,17 @@
 import React, { useState } from 'react'
 import ErrorMessage from '../auth/ErrorMessage'
 
-function FormArticle({ type, onSubmit, ininitialValues = {}, errors }) {
+function FormArticle({
+    onSubmit,
+    ininitialValues = {
+        title: '',
+        body: '',
+        description: '',
+        tagList: '',
+    },
+    errors = null,
+}) {
+    console.log(errors)
     const [title, setTitle] = useState(ininitialValues?.title)
     const [body, setBody] = useState(ininitialValues?.body)
     const [description, setDescription] = useState(ininitialValues?.description)
@@ -10,11 +20,13 @@ function FormArticle({ type, onSubmit, ininitialValues = {}, errors }) {
     const handlesSubmit = (e) => {
         e.preventDefault()
 
+        console.log(tagList)
+
         onSubmit({
             title,
             body,
             description,
-            tagList: tagList.split(','),
+            tagList: !tagList ? [] : tagList.split(','),
         })
     }
 

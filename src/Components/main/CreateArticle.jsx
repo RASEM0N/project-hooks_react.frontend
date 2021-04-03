@@ -1,24 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import FormArticle from '../common/FormArticle'
+import useFetch from '../../Hooks/useFetch'
+import { Redirect } from 'react-router-dom'
 
 function CreateArticle() {
     const errors = null
-    // const ininitialValues = {
-    //     title: '',
-    //     body: '',
-    //     description: '',
-    //     tagList: '',
-    // }
+    const apiUrl = '/articles'
+    const [{ response, error, isLoading }, doFetch] = useFetch(apiUrl)
+
     const handlesSubmit = (data) => {
-        console.log(data)
+        doFetch({
+            method: 'POST',
+            data: {
+                article: data,
+            },
+        })
     }
+
+    if (!isLoading && response)
+        return <Redirect to={`/article/${response.article.slug}`} />
 
     return (
         <div>
             <FormArticle
-                type="create"
-                errors={errors}
-                // ininitialValues={ininitialValues}
+                errors={error ? error?.errors : []}
                 onSubmit={handlesSubmit}
             />
         </div>
